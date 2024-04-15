@@ -1,0 +1,1 @@
+# Specifications for Score Board service
