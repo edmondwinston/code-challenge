@@ -37,3 +37,9 @@
 
 > 5. We want to prevent malicious users from increasing scores without
    > authorisation.
+
+- The term _malicious users_ has several different interpretations, and so is
+  _authorisation_. Most of the time, a requirement like this would indicate both
+  **OAth** and **RBAC** implementation, but for the greater good, we will assume
+  that RBAC is just a list of emails, and if the Google OAth email matches one
+  of them, update right is granted.
