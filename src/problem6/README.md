@@ -1,4 +1,4 @@
-## Analysis on Software Requirements
+## Requirements Analysis
 
 > 1. We have a website with a score board, which shows the top 10 user’s scores.
 
@@ -43,3 +43,24 @@
   **OAth** and **RBAC** implementation, but for the greater good, we will assume
   that RBAC is just a list of emails, and if the Google OAth email matches one
   of them, update right is granted.
+
+## Approaches Evaluation
+
+Approaches below exclude authentication, and focus on developing a flow to make
+updating the score and the score board seamless.
+
+> The first question raised in the analysis above is whether to use WS or SSE,
+> but by taking a step back and looking at the big picture, we realise the live
+> feature of the score board requires (1) an event-based connection (2) a
+> database. This analysis results in two genre of approaches, either
+> implementing them separately, or as a whole
+
+**Approach 1: SSE/Long-polling (LP), an update endpoint, and a database**
+
+Client maintains the live score board using either SSE or LP, and pushes score
+updates to an endpoint where they are published across subscriptions of an
+observer.
+
+Something like `BehaviourSubject` is preferred in order for new subscribers to
+conveniently have the latest top 10 without having to query the database every
+single time.
