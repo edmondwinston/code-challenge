@@ -7,11 +7,52 @@ import {
 } from "components/ui/select";
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface CurrencyItem {
+	currency: string;
+	date: string;
+	price: number;
+}
 
 function App() {
 	const [valueLeft, setValueLeft] = useState("BTC");
 	const [valueRight, setValueRight] = useState("BTC");
+	const [exchangeRates, setExchangeRates] = useState<CurrencyItem[]>([]);
+
+	async function getExchangeRate() {
+		const r = await fetch("https://interview.switcheo.com/prices.json", {
+			method: "GET",
+		});
+
+		if (!r.ok) {
+			throw new Error("Fatal: Fail to fetch exchange rate.");
+		}
+
+		const data = (await r.json()) as CurrencyItem[];
+		const processedData = data.reduce((acc, currentItem) => {
+			const currItemIdxInAcc = acc.findIndex(
+				(item) => item.currency === currentItem.currency,
+			);
+			if (currItemIdxInAcc === -1) {
+				acc.push(currentItem);
+			} else {
+				const itemInAcc = acc[currItemIdxInAcc];
+				if (new Date(currentItem.date) >= new Date(itemInAcc.date)) {
+					// The comparison is inclusive since we prioritise later-appear items.
+					acc[currItemIdxInAcc] = currentItem;
+				}
+			}
+			return acc;
+		}, [] as CurrencyItem[]);
+
+		console.log(processedData);
+		setExchangeRates(processedData);
+	}
+
+	useEffect(() => {
+		getExchangeRate();
+	}, []);
 
 	return (
 		<div className="h-screen flex items-center justify-center">
