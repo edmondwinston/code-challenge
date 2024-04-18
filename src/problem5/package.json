@@ -6,8 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "pnpm /dev:.*/",
-    "dev:build": "esbuild dev.ts ./src --bundle --outdir=dist --packages=external --platform=node --sourcemap --watch",
-    "dev:run": "node --inspect -r ./dist/dev.js --watch dist/src",
+    "dev:build": "esbuild ./src/index.ts --bundle --outfile=./dist/index.cjs --packages=external --platform=node --sourcemap --watch",
+    "dev:run": "node --watch ./dist/index.cjs",
     "build": "esbuild index=./src --bundle --minify --outdir=dist --packages=external --platform=node",
     "start": "node dist",
     "test": "mocha --recursive src/__test__/**/*.test.js"
@@ -25,7 +25,10 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.7.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.17",
+    "@types/express-session": "^1.18.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.5.9",
     "@types/passport": "^1.0.16",
