@@ -63,4 +63,35 @@ observer.
 
 Something like `BehaviourSubject` is preferred in order for new subscribers to
 conveniently have the latest top 10 without having to query the database every
-single time.
+single time. Again, we would want to minimise the latency, so this subject is
+storing the top 20.
+
+```ts
+// file: scoring.service.ts
+
+// `CustomBehaviourSubject` filter values that shouldn't be notified on the observer side.
+const topScoreSubject = new CustomBehaviourSubject([]);
+
+// ...
+
+const scoreUpdated = (req: Request, res: Response) => {
+  const top20 = topScoreSubject.value;
+  const [newTop20, updatedTop] = insertAndUpdateIfNeccessary(
+    req.payload.user,
+    top20,
+  );
+
+  if (updatedTop === 10) {
+    topScoreSubject.next(newTop20);
+  } else if (updatedTop === 20) {
+    topScoreSubject.next({ shouldNotify: false, v: newTop20 });
+  } else {
+    insertToDb(req.payload.user);
+  }
+};
+
+// file: scoring.controller.ts
+
+export const scoreRouter = express.Router()
+  .post("/", scoreUpdated);
+```
