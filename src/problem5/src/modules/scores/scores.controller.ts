@@ -1,6 +1,6 @@
 import express from "express";
 
-import {getScores} from "./scores.service.js";
+import {getScores} from "./scores.service";
 
 import {ensureAuthenticated} from "../../middlewares";
 
