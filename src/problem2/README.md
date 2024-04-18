@@ -1,3 +1,11 @@
+# Currency Swap
+
+- [x] ts absolute import
+- [x] install tw + shadcnui
+- [x] 2(label + input)
+- [ ] get list from api + parse
+- [ ] according svg icon
+
 # Getting Started with Create React App
 
 This project was bootstrapped with
