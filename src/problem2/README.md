@@ -3,8 +3,9 @@
 - [x] ts absolute import
 - [x] install tw + shadcnui
 - [x] 2(label + input)
-- [ ] get list from api + parse
-- [ ] according svg icon
+- [x] get list from api + parse
+- [x] according svg icon
+- [ ] calculate value
 
 # Getting Started with Create React App
 
