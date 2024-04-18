@@ -95,3 +95,14 @@ const scoreUpdated = (req: Request, res: Response) => {
 export const scoreRouter = express.Router()
   .post("/", scoreUpdated);
 ```
+
+**Approach 2: Redis Stream, Pub/Sub, and maybe a wrapper service**
+
+To be clear, Redis Stream is a data structure, not something like Pub/Sub, which
+is essentially a socket and will block. The idea here is that clients will
+subscribe to a top-10 channel, which will publish only when the top 10 changes,
+while new updates will be added into a stream for future references. Top 10 can
+be kept track using a sorted set, as mentioned, and updated via triggers that we
+register to Redis itself. This would drastically reduce the need for a separate
+service, which does not mean we should, but rather consider based on the current
+architecture and client needs.
