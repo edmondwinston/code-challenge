@@ -60,12 +60,47 @@ paths:
                   properties:
                     user:
                       type: string
-                      example: Jocelyn June
+                      examples: [Jocelyn June]
                     score:
                       type: integer
-                      example: 88
+                      examples: [88]
+        '400':
+          description: Bad request - Invalid parameters
+        '500':
+          description: Internal server error
+  /scores/update:
+    patch:
+      tags:
+        - scores
+      summary: Update single user score
+      description: Increase user's score by amount.
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                user_id:
+                  type: string
+                  examples: ['u12345_Beth']
+                score_incr:
+                  type: integer
+                  examples: [8]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  message:
+                    type: string
+                    examples: ['Hey! Updated.']
         '400':
           description: Bad request - Invalid parameters
         '500':
           description: Internal server error
 ```
+
+### Update Mechanism
