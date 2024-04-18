@@ -106,3 +106,24 @@ be kept track using a sorted set, as mentioned, and updated via triggers that we
 register to Redis itself. This would drastically reduce the need for a separate
 service, which does not mean we should, but rather consider based on the current
 architecture and client needs.
+
+```js
+redis.registerStreamTrigger(
+  "score-updated",
+  "stream:*",
+  function (c, data) {
+    // Callback run on each score update added to the stream.
+    const top10 = c.call("ZREVRANGE", "ss_top10_scores", 0, 9);
+    c.call("ZADD", "ss_top10_scores", data.score, data.username);
+    const newTop10 = c.call("ZREVRANGE", "ss_top10_scores", 0, 9));
+    const top10Updated = top10 === newTop10;
+    if (top10Updated) {
+      c.call("PUBLISH", "chan:top_10", JSON.stringify(newTop10));
+    }
+  },
+);
+```
+
+The idea is the same if the decision is to have our own service, with note that
+latest message ID of the stream must be stored in case of multiple updates
+between stream reads.
